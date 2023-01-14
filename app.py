@@ -1,42 +1,51 @@
-MENU_PROMPT = "\nEnter 'a' to add a movie, 'l' to see your movies, 'f' to find a movie by title, or 'q' to quit: "
-movies = []
+from nut import database
 
-def add_movie():
-    title = input("Enter the movie title: ")
-    director = input("Enter the movie director: ")
-    year = input("Enter the movie release year: ")
-
-    movies.append({
-        'title': title,
-        'director': director,
-        'year': year
-    })
-
-def list_movies():
-    for movie in movies:
-        print_movie(movie)
+USER_CHOICE = """
+Enter:
+- 'a' to add a new book
+- 'l' to list all books
+- 'r' to mark a book as read
+- 'd' to delete a book
+- 'q' to quit
+Your choice: """
 
 
-def print_movie(movie):
-    print(f"Title: {movie['title']}")
-    print(f"Director: {movie['director']}")
-    print(f"Year: {movie['year']}")
+def add_book ():
+    name = input("Enter the new book name: ")
+    author = input("Enter the new book author: ")
 
-def find_movies():
-    search_title = input("Please print a title you're looking for: ")
+    database.add_book(name,author)
 
-    for movie in movies:
-        if movie["title"] == search_title:
-            print_movie(movie)
+
+def list_books():
+    books = database.get_all_books()
+    for book in books:
+        read = 'YES' if book['read'] == '1' else 'NO'
+        print(f"{book['name']} by {book['author']}, read: {book['read']}")
+
+
+def read_book():
+    name = input("Enter the name of the book you just finished reading: ")
+
+    database.mark_book_as_read(name)
+
+
+def delete_book():
+    name = input("Enter the name of the book you want to remove: ")
+
+    database.delete_book(name)
+
 
 user_options = {
-    "a" : add_movie,
-    "f" : find_movies,
-    "l" : list_movies
+    "a" : add_book,
+    "l" : list_books,
+    "r" : read_book,
+    "d" : delete_book
 }
 
 def menu():
-    selection = input(MENU_PROMPT)
+    database.create_book_table()
+    selection = input(USER_CHOICE)
     while selection != 'q':
         if selection in user_options:
             selected_function = user_options[selection]
@@ -44,6 +53,6 @@ def menu():
         else:
             print('Unknown command. Please try again.')
 
-        selection = input(MENU_PROMPT)
+        selection = input(USER_CHOICE)
 
 menu()
