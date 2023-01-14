@@ -2,49 +2,49 @@ from nut import database
 
 USER_CHOICE = """
 Enter:
-- 'a' to add a new book
-- 'l' to list all books
-- 'r' to mark a book as read
-- 'd' to delete a book
+- 'a' to add a new artwork
+- 'l' to list all artworks
+- 'f' to mark a artwork as finished
+- 'd' to delete an artwork
 - 'q' to quit
 Your choice: """
 
 
-def add_book ():
-    name = input("Enter the new book name: ")
-    author = input("Enter the new book author: ")
+def add_artwork():
+    name = input("Enter the new artwork name: ")
+    author = input("Enter the new artwork author: ")
 
-    database.add_book(name,author)
-
-
-def list_books():
-    books = database.get_all_books()
-    for book in books:
-        read = 'YES' if book['read'] == '1' else 'NO'
-        print(f"{book['name']} by {book['author']}, read: {book['read']}")
+    database.add_artwork(name, author)
 
 
-def read_book():
-    name = input("Enter the name of the book you just finished reading: ")
+def list_artworks():
+    artworks = database.get_all_artworks()
+    for artwork in artworks:
+        finished = 'YES' if artwork['finished'] == '1' else 'NO'
+        print(f"{artwork['name']} by {artwork['author']}, finished: {artwork['finished']}")
 
-    database.mark_book_as_read(name)
+
+def finish_artwork():
+    name = input("Enter the name of the artwork you just finished: ")
+
+    database.mark_artwork_as_finished(name)
 
 
-def delete_book():
-    name = input("Enter the name of the book you want to remove: ")
+def delete_artwork():
+    name = input("Enter the name of the artwork you want to remove: ")
 
-    database.delete_book(name)
+    database.delete_artwork(name)
 
 
 user_options = {
-    "a" : add_book,
-    "l" : list_books,
-    "r" : read_book,
-    "d" : delete_book
+    "a": add_artwork,
+    "l": list_artworks,
+    "f": finish_artwork,
+    "d": delete_artwork
 }
 
 def menu():
-    database.create_book_table()
+    database.create_artwork_table()
     selection = input(USER_CHOICE)
     while selection != 'q':
         if selection in user_options:
